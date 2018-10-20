@@ -4,6 +4,9 @@ import cv2
 # Capture the frames of the video
 cap = cv2.VideoCapture('input.mov')
 
+# Cars classifiere
+car_cascade = cv2.CascadeClassifier('cars.xml')
+
 # As long as thee capture is still open  then the loop will run
 while(cap.isOpened()):
 	# Read the frames of the video
