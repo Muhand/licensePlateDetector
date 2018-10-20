@@ -9,6 +9,9 @@ while(cap.isOpened()):
 	# Read the frames of the video
     ret, frame = cap.read()
 
+     # Convert each frame to gray scale
+    gray = cv2.cvtColor(frames, cv2.COLOR_BGR2GRAY)
+
     # Show the video in a frame
     cv2.imshow('frame',frame)
 
