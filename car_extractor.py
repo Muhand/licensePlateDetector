@@ -6,11 +6,12 @@ import imutils
 cap = cv2.VideoCapture('input.mov')
 
 # Cars classifiere
-# car_cascade = cv2.CascadeClassifier('cars.xml')
+car_cascade = cv2.CascadeClassifier('cars.xml')
 
 # Initialize the first frame in the video stream
 firstFrame = None
 counter = 0
+padding = 0
 
 # As long as thee capture is still open  then the loop will run
 while(True):
@@ -56,17 +57,34 @@ while(True):
     	(x, y, w, h) = cv2.boundingRect(c)
 
     	# Create a new frame for this contour
-    	# blank_image = np.zeros((h,w,3), np.uint8)
-    	car = frame[y:y+h, x:x+w]
-    	cv2.imshow('CARR',car)
+    	blank_image = np.zeros((h,w,3), np.uint8)
+    	extractedFrame = frame[y-padding:(y+h)+padding, x-padding:(x+w)+padding]
+    	# if extractedFrame is not None:
+    	# 	cv2.imshow('CARR',extractedFrame)
+    	# 	continue
+    	# else:
+    	# 	break
     	name = 'CAR_' + str(counter)
-    	# print(counter)
-    	cv2.imwrite('cars/'+name+'.png',car)
+    	cv2.imwrite('cars3/'+name+'.png',extractedFrame)
+
+    	# Make sure it's a car by extracting all cars in this frame
+    	cars = car_cascade.detectMultiScale(extractedFrame, 1.1, 1)
+    	for (x,y,w,h) in cars:
+    		# Draw a rectangle for each car
+    		# cv2.rectangle(frame, (x,y), (x+w,y+h), (0, 0, 255), 2)
+
+    		# Create the car frame
+    		car = extractedFrame[y:y+h, x:x+w]
+
+    		# Create a name for this car
+    		name = 'CAR_' + str(counter)
+
+    		# Write this image to a file
+    		cv2.imwrite('cars2/'+name+'.png',car)
     	cv2.rectangle(frame, (x,y), (x+w,y+h), (0, 255, 0), 2)
     	counter+=1
 
-    # In each frame detect cars
-    # cars = car_cascade.detectMultiScale(gray, 1.1, 1)
+
 
     # Draw a rectangle around each car
     # for (x,y,w,h) in cars:
